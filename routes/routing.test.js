@@ -2,7 +2,6 @@ const request = require('supertest');
 const express = require('express');
 const router = require('./routing');
 
-// Create a mock MatchHub
 const MatchHub = require('../dataBase/mongoDb');
 jest.mock('../dataBase/mongoDb');
 
@@ -43,12 +42,12 @@ describe('Match Router', () => {
     });
   });
 
-  describe('GET /match/id', () => {
+  describe('GET /matchHub/id', () => {
     it('should return the match with the specified ID', async () => {
       const matchId = '12345';
       const match = {
         _id: matchId,
-        teamsInvolved: 'ind-pak',
+        teamsInvolved: 'Team A vs Team B',
         teamsComposition: '3 batsman, 4 baller & 4 AllRounder',
         date: '10-08-2022',
         venue: 'Stadium X Delhi'
@@ -79,7 +78,7 @@ describe('Match Router', () => {
   describe('GET /matchHub/date', () => {
     it('should return match by date if a valid date query parameter is provided', async () => {
       const date = '2023-07-07';
-      const match = [{ teamsInvolved: 'Team A - Team B', date: '2023-07-07' }];
+      const match = [{ teamsInvolved: 'Team A vs Team B', date: '2023-07-07' }];
       MatchHub.prototype.getMatchesByDate.mockResolvedValue(match);
   
       const response = await request(app).get('/matchHub/date').query({ date });
@@ -135,8 +134,8 @@ describe('Match Router', () => {
   describe('POST /matchHub', () => {
     it('should create a new match', async () => {
       const matchData = {
-        teamsInvolved: 'Team A - Team B',
-        teamsComposition: 'Team A: Player1, Player2, Team B: Player3, Player4',
+        teamsInvolved: 'Team A vs Team B',
+        teamsComposition: '3 batsman,4 baller & 4 AllRounder',
         date: '2023-07-07',
         venue: 'Stadium X',
       };
@@ -154,7 +153,7 @@ describe('Match Router', () => {
     it('should handle errors thrown by MatchHub when creating an match', async () => {
       const matchData = {
         teamsInvolved: 'Team A vs Team B',
-        teamsComposition: 'Team A: Player1, Player2, Team B: Player3, Player4',
+        teamsComposition: '3 batsman,4 baller & 4 AllRounder',
         date: '2023-07-07',
         venue: 'Stadium X',
       };
@@ -171,7 +170,7 @@ describe('Match Router', () => {
 
   describe('PATCH  /matchHub', () => {
     it('should update an existing match', async () => {
-      const teamsInvolved = 'Team A - Team B';
+      const teamsInvolved = 'Team A vs Team B';
       const date = '2023-07-07';
       const updateData = {
         playerOfMatch: 'Player1',
@@ -190,7 +189,7 @@ describe('Match Router', () => {
     });
 
     it('should handle errors thrown by MatchHub when updating an match', async () => {
-      const teamsInvolved = 'Team A - Team B';
+      const teamsInvolved = 'Team A vs Team B';
       const date = '2023-07-07';
       const updateData = {
         playerOfMatch: 'Player1',

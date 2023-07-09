@@ -60,6 +60,7 @@ POST /matchHUb: Create a new match.
 Request body:
 {
   "teamsInvolved": "Team A vs Team B",
+  "teamsComposition":"3 batsman,4 baller & 4 AllRounder",
   "date": "2023-07-03",
   "venue": "Stadium X Delhi"
 }
