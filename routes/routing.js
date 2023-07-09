@@ -63,8 +63,8 @@ router.get('/count', async (req, res) => {
   const { team } = req.query;
   try {
     const winnerCount = await matchdetail.getCount({ winner: team });
-    const looserCount = await matchdetail.getCount({ looser: team });
-    res.json({ winnerCount, looserCount });
+    const loserCount = await matchdetail.getCount({ loser: team });
+    res.json({ winnerCount, loserCount });
   } catch (err) {
     res.status(500).send('Error: ' + err.message);
   }
@@ -102,7 +102,7 @@ router.post('/', async (req, res) => {
  *   date: string,
  *   playerOfMatch: string,
  *   winner: string,
- *   looser: string
+ *   loser: string
  * }
  * This route updates an existing match with the provided data.
  */
@@ -111,7 +111,7 @@ router.patch('/', async (req, res) => {
   const updateData = {
     playerOfMatch: req.body.playerOfMatch,
     winner: req.body.winner,
-    looser: req.body.looser,
+    loser: req.body.loser,
   };
   try {
     const updatedMatch = await matchdetail.updateMatchDetails(teamsInvolved, date, updateData);

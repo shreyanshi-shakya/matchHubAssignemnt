@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// Define the match schema using mongoose.Schema
 const matchSchema = new mongoose.Schema(
   {
     winner: {
@@ -7,7 +8,7 @@ const matchSchema = new mongoose.Schema(
       required: false,
       default: null,
     },
-    looser: {
+    loser: {
       type: String,
       required: false,
       default: null,
@@ -23,6 +24,7 @@ const matchSchema = new mongoose.Schema(
     playerOfMatch: {
       type: String,
       required: false,
+      default: 'unknown'
     },
     date: {
       type: String,
@@ -38,8 +40,10 @@ const matchSchema = new mongoose.Schema(
   }
 );
 
+// Create the matchModel  using the matchSchema 
 const matchModel = mongoose.model('matches', matchSchema);
 
+// MatchHub class encapsulating the business logic for match operations
 class MatchHub {
   /**
    * Retrieve all matches.
@@ -61,7 +65,7 @@ class MatchHub {
    */
   async getMatchById(id) {
     try {
-      const response = await matchModel.findById(id).select('teamsInvolved teamsComposition date venue');
+      const response = await matchModel.findById(id).select('teamsInvolved teamsComposition  venue playerOfMatch');
       if (response) {
         return response;
       } else {
@@ -79,7 +83,7 @@ class MatchHub {
    */
   async getMatchesByDate(date) {
     try {
-      const response = await matchModel.find({ date }).select('teamsInvolved');
+      const response = await matchModel.find({ date }).select('teamsInvolved date');
       return response;
     } catch (err) {
       throw new Error('Error fetching match by date: ' + err);
@@ -102,7 +106,7 @@ class MatchHub {
 
   /**
    * Create a new match.
-   * @param {Object} Data - Data for the new match.
+   * @param {Object} matchData - Data for the new match.
    * @returns {Promise<Object>} Newly created match object.
    */
   async createMatch(matchData) {
